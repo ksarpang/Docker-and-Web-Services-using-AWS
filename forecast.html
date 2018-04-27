@@ -1,0 +1,174 @@
+
+<html lang="en">
+
+<head>
+  <title>Welcome to Weather Forecast</title>
+
+
+  <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+
+</head>
+
+<script type="text/javascript" language="javascript">
+var canvas ;
+var context ;
+var Max_val;
+var Min_val;
+var sections;
+var Xaxis_scale;
+var Yaxis_scale;
+// Values for the Data Plot
+function init_graph(Dates,TMAX,TMIN) {
+// set these values for your data
+sections = 6;
+Max_val = 130;
+Min_val = -40;
+var stepSize = 10;
+var columnSize = 50;
+var rowSize = 50;
+var margin = 10;
+//Convert data JSON and assign values to Dates, TMAX and TMIN
+canvas = document.getElementById("canvas");
+context = canvas.getContext("2d");
+context.fillStyle = "#0909ff"
+context.font = "20 pt Verdana"
+Yaxis_scale = (canvas.height - columnSize - margin) / (Max_val - Min_val);
+Xaxis_scale = (canvas.width - rowSize) / sections;
+context.strokeStyle="#009933"; // color of grid lines
+context.beginPath();
+// print Parameters on X axis, and grid lines on the graph
+for (i=1;i<=sections;i++) {
+var x = i * Xaxis_scale;
+context.fillText(Dates[i], x,columnSize - margin);
+context.moveTo(x, columnSize);
+context.lineTo(x, canvas.height - margin);
+}
+// print row header and draw horizontal grid lines
+var count =  0;
+for (scale=Max_val;scale>=Min_val;scale = scale - stepSize) {
+var y = columnSize + (Yaxis_scale * count * stepSize);
+context.fillText(scale, margin,y + margin);
+context.moveTo(rowSize,y)
+context.lineTo(canvas.width,y)
+count++;
+}
+context.stroke();
+context.translate(rowSize,canvas.height + Min_val * Yaxis_scale);
+context.scale(1,-1 * Yaxis_scale);
+// Color of each dataplot items
+context.strokeStyle="#FF0066";
+plotData(TMAX);
+context.strokeStyle="#9903FF";
+plotData(TMIN);
+}
+function plotData(dataSet) {
+context.beginPath();
+context.moveTo(0, dataSet[0]);
+for (i=1;i<sections;i++) {
+context.lineTo(i * Xaxis_scale, dataSet[i]);
+}
+context.stroke();
+}
+  function call_rest() {
+   var baseUrl = window.location.protocol + "//" + window.location.hostname ; 
+   console.log(baseUrl);
+    $.ajax({
+      type: "GET",
+      url: baseUrl+":80/forecast/" + $('#date').val(),
+      success: function (data) {
+	console.log("data received:", data);
+        $('#ta').val(JSON.stringify(data));
+        $('#id1').show();
+        var forecast_date=[];
+        var TMAX=[];
+        var TMIN=[];
+        for(i=0;i<data.length;i++)
+        {
+                forecast_date.push(data[i]["DATE"]);
+                TMAX.push(parseFloat(data[i]["TMAX"]));
+                TMIN.push(parseFloat(data[i]["TMIN"]));
+        }
+        $('#canvas').remove();
+          $(`<canvas id="canvas" height="400" width="650">
+        </canvas>`).insertAfter($('#next_request'));
+        init_graph(forecast_date,TMAX,TMIN);
+        $('#Graph').show();
+      },
+    //  error:function(err){
+    //    console.log("Error:",err);
+    //  },
+    //  complete: function(data){
+      //    console.log("data received:", data);
+        //  $('#ta').val(JSON.stringify(data));
+          //$('#id1').show();
+      //},
+      dataType: "json"
+    });
+  }
+function call_forecast() {
+	var baseUrl = window.location.protocol + "//" + window.location.hostname ;
+      $.ajax({
+      type: "GET",
+      url: baseUrl+":80/API_forecast/" + $('#date').val(),
+      success: function (data) {
+	console.log("data received:", data);
+        $('#ta').val(JSON.stringify(data));
+        $('#id1').show();
+        var forecast_date=[];
+        var TMAX=[];
+        var TMIN=[];
+        for(i=0;i<data.length;i++)
+        {
+                forecast_date.push(data[i]["DATE"]);
+                TMAX.push(parseFloat(data[i]["TMAX"]));
+                TMIN.push(parseFloat(data[i]["TMIN"]));
+        }
+        $('#canvas').remove();
+          $(`<canvas id="canvas" height="400" width="650">
+        </canvas>`).insertAfter($('#next_request'));
+        init_graph(forecast_date,TMAX,TMIN);
+        $('#Graph').show();
+      },
+     dataType: "json"
+ });
+}
+</script>
+
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h3 class="text-muted">Welcome to Weather Forecast</h3>
+    </div>
+
+    <div class="jumbotron">
+      <br>
+      <h5>Enter a Date</h5>
+      <input id="date" type="date"></input>
+      </br>
+      <br>
+      <button id="submit_text1" class="btn btn-lg btn-primary" onclick="javascript:call_rest()" type="button">Submit</button>
+      <button id="submit_text2" class="btn btn-lg btn-primary" onclick="javascript:call_forecast()" type="button">API Forecast</button>  
+    </br>
+      <div id="id1" style="display: none">
+        <h5>Forecasted Weather</h5>
+        <textarea id="ta" rows='10' cols='100'></textarea>
+      </div>
+    </div>
+    <div id="Graph" style="display: none" align="center">
+    <h2 id="next_request">Forecast Weather Data</h2>
+    <canvas id="canvas" height="500" width="650">
+    </canvas>
+    <footer class="footer">
+      <p>&copy; Soudamini</p>
+    </footer>
+
+  </div>
+</body>
+
+</html>
+
