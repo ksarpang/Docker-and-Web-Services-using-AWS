@@ -16,7 +16,7 @@ used Yahoo weather API to forecast weather for the next 7 days GET Method - take
 We have created to end ports in python: one for predicting the weather data uisng "daily.csv " file and an other using the Yahoo in python. you can run the code using the below link ec2-52-14-211-66.us-east-2.compute.amazonaws.com:5000/forecast/date/ ec2-52-14-211-66.us-east-2.compute.amazonaws.com:5000/API_forecast/
 # UI Design
 The web page displays a date picker where the user selects the date and provided with the submit button and API_forecast button. The submit button returns the values of the next 6 days from the day choosen using the data from the daily.csv file. The API_forecast button returns the weather data from the yahoo weather API from the current date in the system. The line Graph displays the pattern of the TMIN and TMAX for the predicted days.
-# # Hosting the web services in a docker
+# Hosting the web services in a docker
 # Installing docker
 $ sudo yum update -y $ sudo yum install -y docker $ sudo service docker start
 # Next, add ubuntu-user to the docker group so you can execute Docker commands without using sudo. Note that you’ll have to log out and log back in for the settings to take effect:
