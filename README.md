@@ -1,5 +1,5 @@
 # Docker-and-Web-Services-using-AWS
-# Implementation of REST API on weather data using the following methods GET, GET with input parameter, POST, DELETE
+Implementation of REST API on weather data using the following methods GET, GET with input parameter, POST, DELETE
 # GET Method
 Opens the csv file and reads the data and returns the all the dates present in the file in json. To run the GET method use the below link : ec2-52-14-133-222.us-east-2.compute.amazonaws.com:5000/historical
 # GET Method with input parameter
@@ -11,7 +11,7 @@ Body(Example): "DATE" : "20130101" "TMAX" : "23.0" "TMIN" : "12.0"
 It takes 'DATE' as input and deletes the corresponding row in the csv file and returns success. Request name - ec2-52-14-133-222.us-east-2.compute.amazonaws.com:5000/historical/YYYYMMDD example:ec2-52-14-133-222.us-east-2.compute.amazonaws.com:5000/historical/ Body: "DATE" : "20130101"
 # WEATHER FORECASTING
 used Yahoo weather API to forecast weather for the next 7 days GET Method - takes 'DATE' as input and forecasts the weather information for the coming 7 days. Request name - ec2-52-14-133-222.us-east-2.compute.amazonaws.com:5000/historical/20150202
-# we have implemented a an UI  with a dynamic approach that uses asynchronous java script requests to send the user inputted data to the REST API .
+we have implemented a an UI  with a dynamic approach that uses asynchronous java script requests to send the user inputted data to the REST API .
 # Python FLASK
 We have created to end ports in python: one for predicting the weather data uisng "daily.csv " file and an other using the Yahoo in python. you can run the code using the below link ec2-52-14-211-66.us-east-2.compute.amazonaws.com:5000/forecast/date/ ec2-52-14-211-66.us-east-2.compute.amazonaws.com:5000/API_forecast/
 # UI Design
@@ -19,7 +19,7 @@ The web page displays a date picker where the user selects the date and provided
 # Hosting the web services in a docker
 # Installing docker
 $ sudo yum update -y $ sudo yum install -y docker $ sudo service docker start
-# Next, add ubuntu-user to the docker group so you can execute Docker commands without using sudo. Note that you’ll have to log out and log back in for the settings to take effect:
+Next, add ubuntu-user to the docker group so you can execute Docker commands without using sudo. Note that you’ll have to log out and log back in for the settings to take effect:
 $ sudo usermod -a -G docker ubuntu
 $ exit
 # Created a directory "cloud" which holds the Dockerfile,app.py templates directory( forecast.html).
